@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4lamaat Tower Cleaning</title>
+    <link rel="stylesheet" href="/css/sloatbooking.css">
+    <style>
+        /* Your CSS styles */
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.side-panel {
+    width: 200px;
+    padding: 10px;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    height: 100vh;
+}
+
+.create-button,
+.add-button {
+    background-color: #175f88;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.calendar-container {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 2px; /* Added 2px gap */
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.calendar-header h3 {
+    margin: 0;
+}
+
+.calendar-body {
+    margin-top: 20px;
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+.calendar th,
+.calendar td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    width: 14.28%;
+    height: 100px;
+    vertical-align: top;
+    position: relative;
+}
+
+.calendar th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.event {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.event.green {
+    background-color: #175f88;
+}
+
+.calendar-sidebar {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-sidebar h3 {
+    margin-top: 0;
+}
+
+.calendar-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.calendar-sidebar li {
+    margin-bottom: 10px;
+}
+
+.calendar-sidebar input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    max-width: 350px;
+    background: #F8F9FD;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(244, 247, 251) 100%);
+    border-radius: 40px;
+    padding: 25px 35px;
+    border: 5px solid rgb(255, 255, 255);
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
+    margin: 20px;
+}
+
+.heading {
+    text-align: center;
+    font-weight: 900;
+    font-size: 30px;
+    color: rgb(16, 137, 211);
+}
+
+.form {
+    margin-top: 20px;
+}
+
+.form .input {
+    width: 90%;
+    background: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 20px;
+    margin-top: 15px;
+    box-shadow: #cff0ff 0px 10px 10px -5px;
+    border-inline: 2px solid transparent;
+}
+
+.form .input::-moz-placeholder {
+    color: rgb(170, 170, 170);
+}
+
+.form .input::placeholder {
+    color: rgb(170, 170, 170);
+}
+
+.form .input:focus {
+    outline: none;
+    border-inline: 2px solid #12B1D1;
+}
+
+.form .forgot-password {
+    display: block;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.form .forgot-password a {
+    font-size: 11px;
+    color: #0099ff;
+    text-decoration: none;
+}
+
+.form .submit-button {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
+    color: white;
+    padding-block: 15px;
+    margin: 20px auto;
+    border-radius: 20px;
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 20px 10px -15px;
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.form .submit-button:hover {
+    transform: scale(1.03);
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 23px 10px -20px;
+}
+
+.form .submit-button:active {
+    transform: scale(0.95);
+    box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 15px 10px -10px;
+}
+
+.available {
+    background-color: #e6ffe6;
+}
+
+.unavailable {
+    background-color: #ffe6e6;
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .side-panel {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .calendar-container {
+        padding: 10px;
+    }
+
+    .calendar th,
+    .calendar td {
+        padding: 5px;
+        height: 50px;
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .form .input {
+        padding: 10px 15px;
+    }
+
+    .form .submit-button {
+        padding: 10px;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="side-panel">
+        <button class="create-button" onclick="toggleModal()"> Book slot</button>
+    </div>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)">&#9664;</button>
+            <h3 id="monthYear"></h3>
+            <button onclick="changeMonth(1)">&#9654;</button>
+        </div>
+        <div class="calendar-body">
+            <table class="calendar" id="calendar"></table>
+        </div>
+    </div>
+
+    <div class="container hidden" id="bookingForm">
+        <div class="heading">
+            Book slot
+            <span class="close-icon" onclick="toggleModal()">&times;</span>
+        </div>
+        <form action="submit.php" class="form" id="bookings" method="POST">
+            <input required="" type="text" id="name" name="name" autocomplete="on" class="input" placeholder="Name">
+            <input required="" type="email" id="email" name="email" autocomplete="on" class="input" placeholder="Email">
+            <input required="" class="input" type="number" name="number" id="number" placeholder="Mobile Number">
+            <input required="" class="input" type="text" name="address" id="address" placeholder="Complete Address">
+            <select name="services" class="input" id="services" required>
+                <option value="" disabled selected>Select Service</option>
+                <option value="Shops cleaning">Shops cleaning</option>
+                <option value="Houses Cleaning">Houses Cleaning</option>
+                <option value="Hotels cleaning">Hotels cleaning</option>
+                <option value="Car Washing">Car Washing</option>
+                <option value="Tower Cleaning">Tower Cleaning</option>
+            </select>
+            <input type="date" class="input" id="date" name="date" required>
+            <select id="time" class="input" name="time" required>
+                <!-- Time options will be dynamically generated -->
+            </select>
+            <input class="submit-button" type="submit" value="Book">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('bookings').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('submit.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Booking successfully created!');
+                        this.reset();
+                        toggleModal();
+                        loadBookings();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function toggleModal() {
+            document.getElementById('bookingForm').classList.toggle('hidden');
+        }
+
+        const calendar = document.getElementById('calendar');
+        const monthYear = document.getElementById('monthYear');
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let bookings = [];
+
+        function fetchBookings() {
+            return fetch('fetch_bookings.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        return data.bookings;
+                    } else {
+                        alert('Error: ' + data.message);
+                        return [];
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    return [];
+                });
+        }
+
+        function loadBookings() {
+            fetchBookings().then(data => {
+                bookings = data;
+                generateCalendar(currentMonth, currentYear);
+            });
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear -= 1;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear += 1;
+            }
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function generateCalendar(month, year) {
+            calendar.innerHTML = '';
+            monthYear.textContent = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
+
+            const firstDay = new Date(year, month).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const calendarBody = document.createElement('tbody');
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const headerRow = document.createElement('tr');
+
+            daysOfWeek.forEach(day => {
+                const th = document.createElement('th');
+                th.textContent = day;
+                headerRow.appendChild(th);
+            });
+            calendarBody.appendChild(headerRow);
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('tr');
+
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+
+                    if (i === 0 && j < firstDay) {
+                        cell.textContent = '';
+                    } else if (date > daysInMonth) {
+                        cell.textContent = '';
+                    } else {
+                        cell.textContent = date;
+                        const bookingForDate = bookings.filter(booking => {
+                            const bookingDate = new Date(booking.date);
+                            return bookingDate.getDate() === date && bookingDate.getMonth() === month && bookingDate.getFullYear() === year;
+                        });
+
+                        if (bookingForDate.length > 0) {
+                            const event = document.createElement('div');
+                            event.classList.add('event', 'green');
+                            event.textContent = bookingForDate[0].name;
+                            cell.appendChild(event);
+                        }
+
+                        date++;
+                    }
+
+                    row.appendChild(cell);
+                }
+
+                calendarBody.appendChild(row);
+            }
+
+            calendar.appendChild(calendarBody);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadBookings();
+            populateTimeOptions();
+        });
+
+        function populateTimeOptions() {
+            const timeSelect = document.getElementById('time');
+            const times = ['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'];
+
+            const currentTime = new Date();
+            const currentHour = currentTime.getHours();
+            const currentMinutes = currentTime.getMinutes();
+
+            times.forEach(time => {
+                const [hour, period] = time.split(' ');
+                const [hours, minutes] = hour.split(':');
+                let hours24 = parseInt(hours, 10);
+
+                if (period === 'PM' && hours24 < 12) {
+                    hours24 += 12;
+                } else if (period === 'AM' && hours24 === 12) {
+                    hours24 = 0;
+                }
+
+                const timeInMinutes = hours24 * 60 + parseInt(minutes, 10);
+                const currentTimeInMinutes = currentHour * 60 + currentMinutes;
+
+                if (timeInMinutes >= currentTimeInMinutes + 120) {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    timeSelect.appendChild(option);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
